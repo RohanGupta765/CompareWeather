@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: TestSuite
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 13.986 s <<< FAILURE! - in TestSuite
+Tests.CompareTemperature.TC3_CompareTwoWeathers  Time elapsed: 0.006 s  <<< FAILURE!
+java.lang.AssertionError: AccuWeather : 17.0 vs OpenWeather :16.22 did not match exactly! - did not expect to find [true] but found [false]
+	at Tests.CompareTemperature.TC3_CompareTwoWeathers(CompareTemperature.java:112)
+
+Tests.CompareTemperature.TC4_VerifyDifferenceInRange  Time elapsed: 0.001 s  <<< FAILURE!
+java.lang.AssertionError: The difference: 0.7800000000000011 is out of range. The range is 0.5 did not expect to find [true] but found [false]
+	at Tests.CompareTemperature.TC4_VerifyDifferenceInRange(CompareTemperature.java:128)
+
