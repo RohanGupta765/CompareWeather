@@ -74,8 +74,60 @@ public class CompareTemperature extends SetupClass{
 		accu_degree_temp_weather = Double.valueOf((splitArray[0]).trim());
 		Assert.assertTrue(accuwp.getWeatherInDegreeLabelElement().isDisplayed());
 		
-	}	
+	}
+
+@Test(priority=1)
+	public void TC2_GetWeatherFromOpenWeather() throws Exception, InterruptedException
+	{	
+		HttpRequestFactory requestFactory
+		  = new NetHttpTransport().createRequestFactory();
+		HttpRequest request = requestFactory.buildGetRequest(
+		  new GenericUrl("https://api.openweathermap.org/data/2.5/weather?q="+City+"&units=metric&appid=7fe67bf08c80ded756e598d6f8fedaea"));
+		String rawResponse = request.execute().parseAsString();
+
+		JSONParser jp = new JSONParser();
+		Object dataobj = jp.parse(rawResponse);
+		JSONObject weatherObj =(JSONObject)dataobj; 
+		
+		String name = (String)weatherObj.get("name");
+		JSONObject jarray = (JSONObject)weatherObj.get("main");
+		openweather_temp_degree = (Double)jarray.get("temp");
+		
+		if(openweather_temp_degree==0)
+		{
+			Assert.assertTrue(false);
+		}
 	
+	}
+	
+	@Test(priority=2)
+	public void TC3_CompareTwoWeathers()
+	{
+		boolean compare_result = false;
+		
+		if(openweather_temp_degree==accu_degree_temp_weather)
+		{
+			compare_result = true;
+		}
+		Assert.assertTrue(compare_result, "AccuWeather : " +accu_degree_temp_weather +" vs OpenWeather :" + openweather_temp_degree+ " did not match exactly! -");
+
+	}
+	
+	@Test(priority=3)
+	public void TC4_VerifyDifferenceInRange()
+	{
+		boolean range_result = false;
+		
+		double diff = accu_degree_temp_weather - openweather_temp_degree;
+		double abs_diff = Math.abs(diff);
+		
+		if(abs_diff<range)
+		{
+			range_result = true;
+		}
+		Assert.assertTrue(range_result, "The difference: "+abs_diff+ " is out of range. The range is "+range);
+		
+	}
 	
 
 }
